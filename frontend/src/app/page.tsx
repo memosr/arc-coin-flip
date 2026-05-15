@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { WalletBar } from '@/components/WalletBar'
 import { CoinGame } from '@/components/CoinGame'
 import { RecentFlips } from '@/components/RecentFlips'
+import { Stats } from '@/components/Stats'
 
 export default function Home() {
   const [refreshKey, setRefreshKey] = useState(0)
@@ -42,10 +43,14 @@ export default function Home() {
           </div>
 
           <div className="anim-up-1">
-            <CoinGame onFlipComplete={() => setRefreshKey((k) => k + 1)} />
+            <Stats refreshKey={refreshKey} />
           </div>
 
           <div className="anim-up-2">
+            <CoinGame onFlipComplete={() => setRefreshKey((k) => k + 1)} />
+          </div>
+
+          <div className="anim-up-3">
             <RecentFlips refreshKey={refreshKey} />
           </div>
         </main>

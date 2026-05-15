@@ -33,6 +33,20 @@ export const COINFLIP_ABI = [
     ],
   },
   {
+    name: 'totalWins',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    name: 'totalLosses',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
     name: 'houseBalance',
     type: 'function',
     stateMutability: 'view',

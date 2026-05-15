@@ -40,6 +40,7 @@ body::after {
 .anim-up   { animation: fadeSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .anim-up-1 { animation: fadeSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both; }
 .anim-up-2 { animation: fadeSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both; }
+.anim-up-3 { animation: fadeSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both; }
 
 /* ── Coin glow wrapper (active during flip) ── */
 .coin-glow {
