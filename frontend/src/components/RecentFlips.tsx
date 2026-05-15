@@ -68,7 +68,18 @@ export function RecentFlips({ refreshKey }: { refreshKey: number }) {
               onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0)' }}
             >
               <span className="text-[11px] font-mono text-white/20">{flip.index}</span>
-              <span className="text-xs font-mono text-white/50 truncate">{shortAddress(flip.player)}</span>
+              <span className="flex items-center gap-1 min-w-0">
+                <span className="text-xs font-mono text-white/50 truncate">{shortAddress(flip.player)}</span>
+                <a
+                  href={`https://testnet.arcscan.app/address/${flip.player}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 text-[10px] text-white/20 hover:text-purple-400/70 transition-colors duration-150"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  ↗
+                </a>
+              </span>
               <span className="text-xs font-mono text-white/70">
                 {formatUsdc(flip.amount)}
                 <span className="text-white/25 ml-1 text-[10px]">USDC</span>
