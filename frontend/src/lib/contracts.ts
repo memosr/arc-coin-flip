@@ -54,6 +54,13 @@ export const COINFLIP_ABI = [
     outputs: [{ type: 'uint256' }],
   },
   {
+    name: 'getPlayerFlips',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'player', type: 'address' }],
+    outputs: [{ type: 'uint256[]' }],
+  },
+  {
     name: 'FlipResult',
     type: 'event',
     inputs: [
