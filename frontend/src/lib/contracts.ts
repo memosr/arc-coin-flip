@@ -1,5 +1,44 @@
 export const COINFLIP_ADDRESS = '0x7bc7dD809562DB33A1C754422AB07B78EC9a8576' as const
 export const USDC_ADDRESS = '0x3600000000000000000000000000000000000000' as const
+export const DAILY_GM_FAUCET_ADDRESS = '0x537C05E213C9A92368db8951d0530C81bD77B877' as const
+
+export const DAILY_GM_ABI = [
+  {
+    name: 'claim',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: [],
+  },
+  {
+    name: 'canClaim',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'user', type: 'address' }],
+    outputs: [{ type: 'bool' }, { type: 'string' }],
+  },
+  {
+    name: 'poolBalance',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    name: 'claimsRemainingToday',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    name: 'timeUntilNextClaim',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'user', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+  },
+] as const
 
 export const COINFLIP_ABI = [
   {

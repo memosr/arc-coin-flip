@@ -6,6 +6,7 @@ import { CoinGame } from '@/components/CoinGame'
 import { RecentFlips } from '@/components/RecentFlips'
 import { Stats } from '@/components/Stats'
 import { MyStats } from '@/components/MyStats'
+import { GMRewardCard } from '@/components/GMRewardCard'
 
 export default function Home() {
   const [refreshKey, setRefreshKey] = useState(0)
@@ -41,6 +42,10 @@ export default function Home() {
             <p className="text-white/30 text-sm mt-2 font-light">
               Double or nothing — USDC on Arc Testnet
             </p>
+          </div>
+
+          <div className="anim-up-1">
+            <GMRewardCard />
           </div>
 
           <div className="anim-up-1">
