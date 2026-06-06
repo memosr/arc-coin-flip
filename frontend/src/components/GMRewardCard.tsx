@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { wagmiConfig } from '@/lib/wagmi'
-import { DAILY_GM_FAUCET_ADDRESS, DAILY_GM_ABI, formatUsdc } from '@/lib/contracts'
+import { DAILY_GM_FAUCET_ADDRESS, DAILY_GM_ABI } from '@/lib/contracts'
 
 function formatCountdown(seconds: number): string {
   const h = Math.floor(seconds / 3600)
@@ -22,16 +22,6 @@ export function GMRewardCard() {
 
   const { data, refetch } = useReadContracts({
     contracts: [
-      {
-        abi: DAILY_GM_ABI,
-        address: DAILY_GM_FAUCET_ADDRESS,
-        functionName: 'poolBalance',
-      },
-      {
-        abi: DAILY_GM_ABI,
-        address: DAILY_GM_FAUCET_ADDRESS,
-        functionName: 'claimsRemainingToday',
-      },
       {
         abi: DAILY_GM_ABI,
         address: DAILY_GM_FAUCET_ADDRESS,
@@ -55,19 +45,14 @@ export function GMRewardCard() {
 
   if (!isConnected || !address) return null
 
-  const poolBalance =
-    data?.[0].status === 'success' ? (data[0].result as bigint) : undefined
-  const claimsRemaining =
-    data?.[1].status === 'success' ? Number(data[1].result as bigint) : undefined
   const canClaimData =
-    data?.[2].status === 'success'
-      ? (data[2].result as readonly [boolean, string])
+    data?.[0].status === 'success'
+      ? (data[0].result as readonly [boolean, string])
       : undefined
   const timeUntilNext =
-    data?.[3].status === 'success' ? Number(data[3].result as bigint) : undefined
+    data?.[1].status === 'success' ? Number(data[1].result as bigint) : undefined
 
   const canClaim = canClaimData?.[0] ?? false
-  const claimReason = canClaimData?.[1] ?? ''
 
   async function handleClaim() {
     if (!address || pending) return
@@ -102,7 +87,6 @@ export function GMRewardCard() {
         boxShadow: '0 0 32px rgba(251,191,36,0.06)',
       }}
     >
-      {/* Sunrise accent bar */}
       <div
         className="h-[2px] w-full"
         style={{
@@ -111,75 +95,30 @@ export function GMRewardCard() {
         }}
       />
 
-      <div className="px-5 py-4 flex items-center gap-4 flex-wrap sm:flex-nowrap">
-        {/* Left: title + subtitle */}
-        <div className="flex-shrink-0">
-          <div
-            className="text-[15px] font-bold bg-clip-text text-transparent leading-snug"
-            style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
-          >
-            🌅 Daily GM Reward
-          </div>
-          <div className="text-[11px] text-white/35 mt-0.5 font-light">
-            Claim 0.5 USDC every 24h
-          </div>
+      <div className="px-5 py-4 flex items-center justify-between gap-4">
+        <div
+          className="text-[15px] font-bold bg-clip-text text-transparent leading-snug"
+          style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
+        >
+          🌅 Daily GM Reward
         </div>
 
-        {/* Middle: pool + claims remaining */}
-        <div className="flex gap-5 flex-1 justify-center">
-          <div className="text-center">
-            <div className="text-[9px] uppercase tracking-widest text-white/25 mb-0.5 font-medium">
-              Pool Balance
-            </div>
-            <div
-              className="text-sm font-semibold font-mono bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
-            >
-              {poolBalance !== undefined ? formatUsdc(poolBalance) + ' USDC' : '—'}
-            </div>
-          </div>
-          <div
-            className="w-px self-stretch"
-            style={{ background: 'rgba(251,191,36,0.12)' }}
-          />
-          <div className="text-center">
-            <div className="text-[9px] uppercase tracking-widest text-white/25 mb-0.5 font-medium">
-              Claims Left Today
-            </div>
-            <div
-              className="text-sm font-semibold font-mono bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
-            >
-              {claimsRemaining !== undefined ? `${claimsRemaining}/10` : '—'}
-            </div>
-          </div>
-        </div>
-
-        {/* Right: action area */}
-        <div className="flex-shrink-0 flex flex-col items-end gap-1 min-w-[130px]">
-          {claimError ? (
-            <div
-              className="px-3 py-2 rounded-xl text-[11px] text-center max-w-[140px]"
-              style={{
-                background: 'rgba(244,63,94,0.10)',
-                color: '#fda4af',
-                border: '1px solid rgba(244,63,94,0.2)',
-              }}
-            >
+        <div className="flex items-center gap-3">
+          {claimError && (
+            <div className="text-[11px]" style={{ color: '#fda4af' }}>
               {claimError}
             </div>
-          ) : justClaimed ? (
+          )}
+          {justClaimed ? (
             <div
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-center"
+              className="px-4 py-2 rounded-xl text-sm font-semibold"
               style={{
-                background:
-                  'linear-gradient(135deg, rgba(52,211,153,0.18), rgba(6,182,212,0.18))',
+                background: 'linear-gradient(135deg, rgba(52,211,153,0.18), rgba(6,182,212,0.18))',
                 color: '#6ee7b7',
                 border: '1px solid rgba(52,211,153,0.28)',
-                boxShadow: '0 0 20px rgba(52,211,153,0.12)',
               }}
             >
-              ✅ 0.5 USDC claimed!
+              ✅ Claimed!
             </div>
           ) : canClaim ? (
             <button
@@ -195,29 +134,16 @@ export function GMRewardCard() {
                 cursor: pending ? 'not-allowed' : 'pointer',
               }}
             >
-              {pending ? '⏳ Claiming…' : '☀️ Claim 0.5 USDC'}
+              {pending ? '⏳ Claiming…' : 'Claim 0.5 USDC'}
             </button>
-          ) : (
-            <div className="text-right">
-              {timeUntilNext !== undefined && timeUntilNext > 0 ? (
-                <>
-                  <div className="text-[9px] uppercase tracking-widest text-white/25 mb-0.5 font-medium">
-                    Next claim in
-                  </div>
-                  <div
-                    className="text-sm font-semibold font-mono bg-clip-text text-transparent"
-                    style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
-                  >
-                    {formatCountdown(timeUntilNext)}
-                  </div>
-                </>
-              ) : claimReason ? (
-                <div className="text-[11px] text-white/35 max-w-[130px] text-right leading-snug">
-                  {claimReason}
-                </div>
-              ) : null}
+          ) : timeUntilNext !== undefined && timeUntilNext > 0 ? (
+            <div
+              className="text-sm font-mono bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(135deg, #fbbf24, #fb923c)' }}
+            >
+              {formatCountdown(timeUntilNext)}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

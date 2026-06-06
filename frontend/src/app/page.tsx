@@ -4,8 +4,6 @@ import { useState } from 'react'
 import { WalletBar } from '@/components/WalletBar'
 import { CoinGame } from '@/components/CoinGame'
 import { RecentFlips } from '@/components/RecentFlips'
-import { Stats } from '@/components/Stats'
-import { MyStats } from '@/components/MyStats'
 import { GMRewardCard } from '@/components/GMRewardCard'
 
 export default function Home() {
@@ -46,14 +44,6 @@ export default function Home() {
 
           <div className="anim-up-1">
             <GMRewardCard />
-          </div>
-
-          <div className="anim-up-1">
-            <Stats refreshKey={refreshKey} />
-          </div>
-
-          <div className="anim-up-2">
-            <MyStats refreshKey={refreshKey} />
           </div>
 
           <div className="anim-up-2">
